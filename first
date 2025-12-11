@@ -1,0 +1,200 @@
+//7.Develop a menu driven Program in C for the following operations on Singly Linked List (SLL) of Student Data with the fields: USN, Name, branch, Sem, PhNo
+a.	Create a SLL of N Students Data by using front insertion.
+b.	Display the status of SLL and count the number of nodes in it
+c.	Perform Insertion / Deletion at End of SLL
+d.	Perform Insertion / Deletion at Front of SLL(Demonstration of stack)
+e.	Exit
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int count = 0;
+
+struct node {
+    int sem;
+    long int phno;
+    char name[20], branch[10], usn[20];
+    struct node *next; 
+};
+
+struct node *first = NULL, *last = NULL, *temp = NULL, *temp1 = NULL;
+
+void create() {
+    int sem;
+    long int phno;
+    char name[20], branch[10], usn[20];
+
+    temp = (struct node*)malloc(sizeof(struct node));
+    if (temp == NULL) {
+        printf("Memory not allocated\n");
+        return;
+    }
+
+    printf("\nEnter USN, NAME, BRANCH, SEMESTER, PHNUM of student : ");
+    scanf("%s %s %s %d %ld", usn, name, branch, &sem, &phno);
+
+    strcpy(temp->usn, usn);
+    strcpy(temp->name, name);
+    strcpy(temp->branch, branch);
+    temp->sem = sem;
+    temp->phno = phno;
+    temp->next = NULL;
+
+    count++;
+}
+
+void insert_atfirst() {
+    if (first == NULL) {
+        create();
+        first = temp;
+        last = first;
+    } else {
+        create();
+        temp->next = first;
+        first = temp;
+    }
+}
+
+void insert_atlast() {
+    if (first == NULL) {
+        create();
+        first = temp;
+        last = first;
+    } else {
+        create();
+        last->next = temp;
+        last = temp;
+    }
+}
+
+void display() {
+    temp1 = first;
+
+    if (temp1 == NULL) {
+        printf("\nList empty to display\n");
+        return;
+    }
+
+    printf("\nLinked list elements from beginning:\n");
+    printf("USN\t NAME\t BRANCH\t SEMESTER\t PH.NUM\n");
+
+    while (temp1 != NULL) {
+        printf("%s\t %s\t %s\t %d\t\t %ld\n",
+               temp1->usn, temp1->name, temp1->branch,
+               temp1->sem, temp1->phno);
+        temp1 = temp1->next;
+    }
+    printf("No of students = %d\n", count);
+}
+
+void delete_end() {
+    struct node *t = first;
+
+    if (first == NULL) {
+        printf("List is Empty\n");
+        return;
+    }
+
+    if (t->next == NULL) {  
+        printf("%s %s %s %d %ld\n", t->usn, t->name, t->branch, t->sem, t->phno);
+        free(t);
+        first = NULL;
+        last = NULL;
+    } else {
+        while (t->next != last)
+            t = t->next;
+
+        printf("%s %s %s %d %ld\n", last->usn, last->name, last->branch, last->sem, last->phno);
+
+        free(last);
+        t->next = NULL;
+        last = t;
+    }
+
+    count--;
+}
+
+void delete_front() {
+    struct node *t = first;
+
+    if (first == NULL) {
+        printf("List is Empty\n");
+        return;
+    }
+
+    if (t->next == NULL) {
+        printf("%s %s %s %d %ld\n", t->usn, t->name, t->branch, t->sem, t->phno);
+        free(t);
+        first = NULL;
+        last = NULL;
+    } else {
+        first = t->next;
+        printf("%s %s %s %d %ld\n", t->usn, t->name, t->branch, t->sem, t->phno);
+        free(t);
+    }
+
+    count--;
+}
+
+void main() {
+    int ch, n, i;
+
+    first = NULL;
+    temp = temp1 = NULL;
+
+    printf("MENU\n");
+    printf("\n1 - Create a SLL of n Students");
+    printf("\n2 - Display from beginning");
+    printf("\n3 - Insert at end");
+    printf("\n4 - Delete at end");
+    printf("\n5 - Insert at beginning");
+    printf("\n6 - Delete at beginning");
+    printf("\n7 - Exit\n");
+
+    while (1) {
+        printf("\nEnter choice : ");
+        scanf("%d", &ch);
+
+        switch (ch) {
+            case 1:
+                printf("\nEnter no of students : ");
+                scanf("%d", &n);
+                for (i = 0; i < n; i++)
+                    insert_atfirst();
+                break;
+
+            case 2: display();
+                    break;
+            case 3: insert_atlast(); 
+                    break;
+            case 4: delete_end(); 
+                      break;
+            case 5: insert_atfirst();
+                     break;
+            case 6: delete_front();
+                      break;
+            case 7: 
+               exit(0);
+
+            default: 
+                   printf("Wrong Choice\n");
+        }
+    }
+    return ;
+}
